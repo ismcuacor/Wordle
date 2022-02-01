@@ -88,29 +88,30 @@ def eligePalabraDiccionario(nuevoDiccionario):
 palabraSugerida=eligePalabraDiccionario(diccionario)
 print("Empieza escribiendo la palabra "+ palabraSugerida + " y ya vamos viendo.")
 diccionario.remove(palabraSugerida)
+diccionarioAux=diccionario.copy()
+
 while 1==1: 
     resultado=input("¿Qué tal ha ido? Escribe los fallos con (-), los aciertos en minusculas y las letras correctas en lugar incorrecto en mayusculas: ")
     if resultado==palabraSugerida:#rompe el bucle si pones la misma palabra que te ha sugerido
         break
+    if resultado=="0": #le pongo un 0 para quitar esa palabra por si no existe en el juego
+        diccionarioAux.remove(palabraSugerida)
     contadorLetra=0
-    print (resultado)
     for letraResultado in resultado:
-        print (letraResultado)
-        if resultado!="0": #le pongo un 0 para quitar esa palabra por si no existe en el juego
-            for palabra in diccionario:
-                if letraResultado=="-" and palabraSugerida[contadorLetra] in palabra:
-                            #print("- "+palabraSugerida[contadorLetra]+" "+palabra)
-                            diccionario.remove(palabra)
-                elif letraResultado.isupper() and (palabraSugerida[contadorLetra] == palabra[contadorLetra]) or not(palabraSugerida[contadorLetra] in palabra):
-                            #print("M "+palabraSugerida[contadorLetra]+" "+palabra)
-                            diccionario.remove(palabra)
-                elif letraResultado.islower() and palabraSugerida[contadorLetra] != palabra[contadorLetra]:
-                            #print("m "+palabraSugerida[contadorLetra]+" "+palabra)
-                            diccionario.remove(palabra)
-            contadorLetra=contadorLetra+1
-                #con esto he modificado el diccionario con las pistas que me ha dado el juego
-        else: #lo que pasa si le pongo el 0
-            diccionario.remove(palabraSugerida)
+        diccionario=diccionarioAux.copy()
+        for palabra in diccionario:
+            if letraResultado=="-" and palabraSugerida[contadorLetra] in palabra:
+                #print("- "+palabraSugerida[contadorLetra]+" "+palabra)
+                diccionarioAux.remove(palabra)
+            elif letraResultado.isupper() and ((palabraSugerida[contadorLetra] == palabra[contadorLetra]) or not(palabraSugerida[contadorLetra] in palabra)):
+                #print("M "+palabraSugerida[contadorLetra]+" "+palabra)
+                diccionarioAux.remove(palabra)
+            elif letraResultado.islower() and not(palabraSugerida[contadorLetra] == palabra[contadorLetra]):
+                #print("m "+palabraSugerida[contadorLetra]+" "+palabra)
+                diccionarioAux.remove(palabra)
+        contadorLetra=contadorLetra+1
+        #con esto he modificado el diccionario con las pistas que me ha dado el juego
+        diccionario=diccionarioAux.copy()
     palabraSugerida=eligePalabraDiccionario(diccionario) #saca la palabra con mas puntos del nuevo diccionario
     print("De acuerdo, ahora prueba con "+ palabraSugerida)
 print("Eso significa que hemos acertado,¡Enhorabuena!")
